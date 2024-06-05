@@ -1,0 +1,6 @@
+package br.com.tela.cadastro;
+
+@Controller
+public class LoginController {
+
+}

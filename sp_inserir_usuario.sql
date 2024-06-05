@@ -1,8 +1,8 @@
 DELIMITER //
 
 CREATE PROCEDURE sp_inserir_usuario(
-    IN tipo_cliente VARCHAR(50),
-    IN nomeCompleto VARCHAR(200),
+    IN tipoCliente VARCHAR(50),
+    IN nome VARCHAR(200),
     IN cpf VARCHAR(50),
     IN telefone VARCHAR(15),
     IN email VARCHAR(100),
@@ -23,9 +23,11 @@ SELECT COUNT(*) INTO email_count FROM usuarios WHERE usuarios.email = email;
     ELSEIF email_count > 0 THEN
         SIGNAL SQLSTATE '45001' SET MESSAGE_TEXT = 'E-mail já cadastrado';
     ELSE
-        INSERT INTO usuarios (tipo_cliente, nomeCompleto, cpf, telefone, email, senha)
-        VALUES (tipo_cliente, nomeCompleto, cpf, telefone, email, senha);
+        INSERT INTO usuarios (tipoCliente, nome, cpf, telefone, email, senha)
+        VALUES (tipoCliente, nome, cpf, telefone, email, senha);
     END IF;
 END //
 
 DELIMITER ;
+
+drop procedure sp_inserir_usuario;

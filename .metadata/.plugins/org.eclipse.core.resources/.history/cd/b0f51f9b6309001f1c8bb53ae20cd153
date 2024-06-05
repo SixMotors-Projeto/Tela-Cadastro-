@@ -1,0 +1,37 @@
+package br.com.tela.cadastro.controller;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import br.com.tela.cadastro.DAO.IUsuario;
+import br.com.tela.cadastro.model.Usuario;
+
+@Controller
+public class LoginController {
+
+	@Autowired
+	private IUsuario usuarioRepository; // Injeta o repositório de usuários
+
+	@PostMapping("/login")
+	public String processarLogin(@RequestBody Map<String, String> requestBody, RedirectAttributes redirectAttributes) {
+		String email = requestBody.get("email");
+		String senha = requestBody.get("senha");
+
+		// Busca o usuário pelo email e senha
+		Usuario usuario = usuarioRepository.findByEmailAndSenha(email, senha);
+
+		if (usuario != null) {
+			// Se o usuário for encontrado, retornar uma mensagem indicando sucesso
+			return "Login realizado com sucesso!";
+		} else {
+			// Se o usuário não for encontrado, retornar uma mensagem indicando falha
+			return "Usuário não encontrado.";
+		}
+	}
+
+}

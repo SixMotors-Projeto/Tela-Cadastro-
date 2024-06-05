@@ -1,0 +1,41 @@
+package br.com.tela.cadastro.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import br.com.tela.cadastro.DAO.IUsuario;
+import br.com.tela.cadastro.model.Usuario;
+
+@Controller
+public class LoginController {
+
+    @Autowired
+    private IUsuario usuarioRepository; // Injeta o repositório de usuários
+
+    @GetMapping("/login")
+    public String exibirFormularioLogin() {
+        return "login"; // Retorna o nome do arquivo HTML que contém o formulário de login
+    }
+
+    @PostMapping("/login")
+    public String processarLogin(@RequestParam("email") String email, 
+                                 @RequestParam("senha") String senha,
+                                 RedirectAttributes redirectAttributes) {
+        // Busca o usuário pelo email e senha
+        Usuario usuario = usuarioRepository.findByEmailAndSenha(email, senha);
+        
+        if (usuario != null) {
+            // Se o usuário for encontrado, redireciona para a página inicial
+            return "redirect:/home";
+        } else {
+            // Se o usuário não for encontrado, redireciona de volta para a página de login com uma mensagem de erro
+            redirectAttributes.addFlashAttribute("mensagemErro", "E-mail ou senha inválidos");
+            return "redirect:/login"; // Correção aqui: redireciona para "/login" em vez de "login"
+        }
+    }
+
+}

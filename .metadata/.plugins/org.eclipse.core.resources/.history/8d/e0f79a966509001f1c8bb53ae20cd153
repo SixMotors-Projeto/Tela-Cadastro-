@@ -1,0 +1,40 @@
+package br.com.tela.cadastro.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.tela.cadastro.model.Usuario;
+import jakarta.persistence.EntityManager;
+
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/login")
+public class LoginController {
+
+    @Autowired
+    private EntityManager entityManager; // Injeta o EntityManager para executar a stored procedure
+
+    @Transactional // Adiciona a anotação @Transactional para iniciar uma transação
+    @PostMapping("/login")
+    public String processarLogin(@RequestBody Usuario usuario) {
+        try {
+            // Chama a stored procedure sp_login_usuario passando os parâmetros do usuário
+            entityManager.createNamedStoredProcedureQuery("sp_login_usuario")
+                .setParameter)("p_email", usuario.getEmail())
+                .setParameter("p_senha", usuario.getSenha())
+                .execute();
+
+            return "Login realizado com sucesso!"; // Retorna uma mensagem de sucesso
+        } catch (Exception e) {
+            // Trata possíveis erros, você pode personalizar essa parte de acordo com suas
+            // necessidades
+            e.printStackTrace();
+            return "Falha ao realizar login.";
+        }
+    }
+}

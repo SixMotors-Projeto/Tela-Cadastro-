@@ -1,0 +1,34 @@
+package br.com.tela.cadastro.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import br.com.tela.cadastro.DAO.IUsuario;
+import br.com.tela.cadastro.model.Usuario;
+
+@Controller
+public class LoginController {
+
+    @Autowired
+    private IUsuario usuarioRepository; // Injeta o repositório de usuários
+
+    @PostMapping("/login")
+    @ResponseBody
+    public String processarLogin(@RequestParam("email") String email, 
+                                 @RequestParam("senha") String senha) {
+        // Busca o usuário pelo email e senha
+        Usuario usuario = usuarioRepository.findByEmailAndSenha(email, senha);
+        
+        if (usuario != null) {
+            // Se o usuário for encontrado, retorna uma mensagem de sucesso
+            return "Login realizado com sucesso!";
+        } else {
+            // Se o usuário não for encontrado, retorna uma mensagem de erro
+            return "E-mail ou senha inválidos";
+        }
+    }
+
+}

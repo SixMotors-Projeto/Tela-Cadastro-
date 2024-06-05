@@ -25,14 +25,15 @@ public class UsuarioController {
         try {
             // Chama a stored procedure sp_inserir_usuario passando os parâmetros do usuário
             entityManager.createNativeQuery(
-                "CALL sp_inserir_usuario(:tipoCliente, :nome, :sobrenome, :cpf, :telefone, :email, :senha)")
+                "CALL sp_inserir_usuario(:tipoCliente, :nome, :cpf, :telefone, :email, :senha)")
                 .setParameter("tipoCliente", usuario.getTipoCliente())
-                .setParameter("nomeCompleto", usuario.getNomeCompleto())
+                .setParameter("nome", usuario.getNome())
                 .setParameter("cpf", usuario.getCpf())
                 .setParameter("telefone", usuario.getTelefone())
                 .setParameter("email", usuario.getEmail())
                 .setParameter("senha", usuario.getSenha())
                 .executeUpdate();
+
             return usuario; // Retorna o usuário criado
         } catch (Exception e) {
             // Trata possíveis erros, você pode personalizar essa parte de acordo com suas

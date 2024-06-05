@@ -5,10 +5,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedStoredProcedureQuery;
+import jakarta.persistence.ParameterMode;
+import jakarta.persistence.StoredProcedureParameter;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "usuarios") // corresponder ao nome da tabela no banco de dados
+@Table(name = "usuarios")
+@NamedStoredProcedureQuery(
+    name = "sp_login_usuario",
+    procedureName = "sp_login_usuario",
+    parameters = {
+        @StoredProcedureParameter(name = "p_email", mode = ParameterMode.IN, type = String.class),
+        @StoredProcedureParameter(name = "p_senha", mode = ParameterMode.IN, type = String.class)
+    }
+    )
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +29,8 @@ public class Usuario {
     @Column(name = "tipo_cliente", length = 50, nullable = false)
     private String tipoCliente;
     
-    @Column(name = "nomeCompleto", length = 200, nullable = false)
-    private String nomeCompleto;
+    @Column(name = "nome", length = 200, nullable = false)
+    private String nome;
     
     @Column(name = "cpf", length = 50, nullable = false, unique = true)
     private String cpf;
@@ -49,12 +60,12 @@ public class Usuario {
 		this.tipoCliente = tipoCliente;
 	}
 
-	public String getNomeCompleto() {
-		return nomeCompleto;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setNomeCompleto(String nomeCompleto) {
-		this.nomeCompleto = nomeCompleto;
+	public void setNome(String nomeCompleto) {
+		this.nome = nomeCompleto;
 	}
 
 	public String getCpf() {
